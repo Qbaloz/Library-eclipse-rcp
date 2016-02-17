@@ -71,6 +71,7 @@ public class BooksListViewPart extends ViewPart {
 				NewBookDialog dialog = new NewBookDialog(
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 				dialog.open();
+				updateBooksList("");
 			}
 
 			@Override
@@ -83,12 +84,7 @@ public class BooksListViewPart extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					bookToList = bookRestService.sendGET(titlePrefix.getText());
-					viewer.setInput(bookToList);
-				} catch (IOException expection) {
-					expection.printStackTrace();
-				}
+				updateBooksList(titlePrefix.getText());
 			}
 
 			@Override
@@ -106,8 +102,7 @@ public class BooksListViewPart extends ViewPart {
 				if(book != null){
 					try {
 						bookRestService.sendDELETE(book.getId());
-						bookToList = bookRestService.sendGET("");
-						viewer.setInput(bookToList);
+						updateBooksList("");
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -182,6 +177,15 @@ public class BooksListViewPart extends ViewPart {
 		column.setResizable(true);
 		column.setMoveable(true);
 		return viewerColumn;
+	}
+	
+	private void updateBooksList(String titlePrefix) {
+		try {
+			bookToList = bookRestService.sendGET(titlePrefix);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		viewer.setInput(bookToList);
 	}
 
 	@Override

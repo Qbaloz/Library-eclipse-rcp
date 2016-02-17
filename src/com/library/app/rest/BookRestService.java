@@ -30,7 +30,6 @@ public class BookRestService {
 		post.setHeader("Content-Type", "Application/JSON");
 		post.setEntity(new StringEntity(jsonString));
 		HttpResponse response = client.execute(post);
-		System.out.println("Response Code : " + response.getStatusLine().getStatusCode());
 
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
@@ -40,7 +39,6 @@ public class BookRestService {
 			result.append(line);
 		}
 		BookTo book = mapper.json2BookTo(result.toString());
-		System.out.println(result.toString());
 		return book;
 	}
 
@@ -62,7 +60,6 @@ public class BookRestService {
 		}
 
 		List<BookTo> bookToList = mapper.json2BookToList(result.toString());
-		System.out.println(result.toString());
 		return bookToList;
 	}
 	

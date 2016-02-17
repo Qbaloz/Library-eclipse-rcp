@@ -42,8 +42,8 @@ public class AuthorTo {
 	
 	@Override
 	public String toString(){
-		return new StringBuffer("firstName : ").append(this.firstName)
-				.append("lastName : ").append(this.lastName).toString();
+		return new StringBuffer("First name: ").append(this.firstName)
+				.append(", last name: ").append(this.lastName).toString();
 	}
 	
 }
