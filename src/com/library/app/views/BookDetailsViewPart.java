@@ -8,6 +8,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.google.gson.Gson;
 import com.library.app.model.AuthorTo;
 import com.library.app.model.BookTo;
+import com.library.app.provider.BookProvider;
 import com.library.app.rest.BookRestService;
 
 import org.eclipse.swt.widgets.Label;
@@ -93,7 +94,7 @@ public class BookDetailsViewPart extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				createBookJson();
 				try {
-					book = bookRestService.sendPOST(jsonString);
+					book = BookProvider.INSTANCE.addBook(jsonString);
 				} catch (ClientProtocolException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {

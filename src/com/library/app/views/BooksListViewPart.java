@@ -7,17 +7,11 @@ import org.eclipse.ui.part.ViewPart;
 import com.library.app.dialogs.NewBookDialog;
 import com.library.app.model.BookTo;
 import com.library.app.provider.BookProvider;
-import com.library.app.rest.BookRestService;
-
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.databinding.beans.PojoProperties;
-import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -39,14 +33,9 @@ public class BooksListViewPart extends ViewPart {
 	private Button btnSearch;
 	private TableViewer viewer;
 	private Table table;
-	private WritableList input = null;
-
-	private BookRestService bookRestService = new BookRestService();
-
-	private List<BookTo> bookToList = new ArrayList<>();
 
 	public BooksListViewPart() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
@@ -75,7 +64,6 @@ public class BooksListViewPart extends ViewPart {
 				NewBookDialog dialog = new NewBookDialog(
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 				dialog.open();
-				updateBooksList("");
 			}
 
 			@Override
@@ -88,7 +76,11 @@ public class BooksListViewPart extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				updateBooksList(titlePrefix.getText());
+				try {
+					BookProvider.INSTANCE.getBooks(titlePrefix.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 
 			@Override
@@ -105,10 +97,8 @@ public class BooksListViewPart extends ViewPart {
 				BookTo book = (BookTo) selection.getFirstElement();
 				if(book != null){
 					try {
-						bookRestService.sendDELETE(book.getId());
-						updateBooksList("");
+						BookProvider.INSTANCE.deleteBook(book.getId());
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -120,10 +110,15 @@ public class BooksListViewPart extends ViewPart {
 			}
 		});
 		
-		createViewer(parent);
+		try {
+			createViewer(parent);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
-	private void createViewer(Composite parent) {
+	private void createViewer(Composite parent) throws IOException {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		createColumns(parent, viewer);
 		table = viewer.getTable();
@@ -132,7 +127,13 @@ public class BooksListViewPart extends ViewPart {
 		table.setLinesVisible(true);
 
 		viewer.setContentProvider(new ArrayContentProvider());
-		viewer.setInput(BookProvider.INSTANCE.getBooks());
+		
+		try {
+			ViewerSupport.bind(viewer, BookProvider.INSTANCE.getBooks(titlePrefix.getText()), PojoProperties.values(new String[] { "id", "title", "authors" }));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		getSite().setSelectionProvider(viewer);
 		
 		GridData gridData = new GridData();
@@ -182,21 +183,9 @@ public class BooksListViewPart extends ViewPart {
 		column.setMoveable(true);
 		return viewerColumn;
 	}
-	
-	public void updateBooksList(String titlePrefix) {
-		try {
-			bookToList = bookRestService.sendGET(titlePrefix);
-			input = new WritableList(bookToList, BookTo.class);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		ViewerSupport.bind(viewer, input, PojoProperties.values(new String[] { "id", "title", "authors" }));
-		viewer.refresh();
-	}
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -21,7 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import com.google.gson.Gson;
 import com.library.app.model.AuthorTo;
 import com.library.app.model.BookTo;
-import com.library.app.rest.BookRestService;
+import com.library.app.provider.BookProvider;
 
 public class NewBookDialog extends TitleAreaDialog {
 
@@ -36,7 +36,6 @@ public class NewBookDialog extends TitleAreaDialog {
 	private Gson jsonParser = new Gson();
 	private Set<AuthorTo> authors = new HashSet<>();
 	private String jsonString;
-	private BookRestService bookRestService = new BookRestService();
 	private BookTo book;
 
 	public NewBookDialog(Shell parentShell) {
@@ -125,7 +124,7 @@ public class NewBookDialog extends TitleAreaDialog {
 		createBookJson();
 
 		try {
-			book = bookRestService.sendPOST(jsonString);
+			book = BookProvider.INSTANCE.addBook(jsonString);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
