@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -36,6 +39,7 @@ public class BooksListViewPart extends ViewPart {
 	private Button btnSearch;
 	private TableViewer viewer;
 	private Table table;
+	private WritableList input = null;
 
 	private BookRestService bookRestService = new BookRestService();
 
@@ -115,10 +119,10 @@ public class BooksListViewPart extends ViewPart {
 
 			}
 		});
-
+		
 		createViewer(parent);
 	}
-
+	
 	private void createViewer(Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		createColumns(parent, viewer);
@@ -130,7 +134,7 @@ public class BooksListViewPart extends ViewPart {
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(BookProvider.INSTANCE.getBooks());
 		getSite().setSelectionProvider(viewer);
-
+		
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.FILL;
 		gridData.horizontalSpan = 3;
@@ -145,8 +149,8 @@ public class BooksListViewPart extends ViewPart {
 	}
 
 	private void createColumns(final Composite parent, final TableViewer viewer) {
-		String[] titles = { "Id", "Title" };
-		int[] bounds = { 50, 185 };
+		String[] titles = { "Id", "Title"};
+		int[] bounds = { 50, 185};
 
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
 		col.setLabelProvider(new ColumnLabelProvider() {
@@ -179,13 +183,15 @@ public class BooksListViewPart extends ViewPart {
 		return viewerColumn;
 	}
 	
-	private void updateBooksList(String titlePrefix) {
+	public void updateBooksList(String titlePrefix) {
 		try {
 			bookToList = bookRestService.sendGET(titlePrefix);
+			input = new WritableList(bookToList, BookTo.class);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		viewer.setInput(bookToList);
+		ViewerSupport.bind(viewer, input, PojoProperties.values(new String[] { "id", "title", "authors" }));
+		viewer.refresh();
 	}
 
 	@Override
