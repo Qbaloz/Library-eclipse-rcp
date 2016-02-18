@@ -1,8 +1,6 @@
 package com.library.app.provider;
 
 import java.io.IOException;
-import java.util.List;
-
 import org.apache.http.client.ClientProtocolException;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
