@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.library.app.model.BookTo;
 
-public class Mapper {
+public class JsonMapper {
 
 	private Gson gson = new Gson();
 	

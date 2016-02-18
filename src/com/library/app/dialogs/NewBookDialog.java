@@ -1,10 +1,8 @@
 package com.library.app.dialogs;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.http.client.ClientProtocolException;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -122,15 +120,8 @@ public class NewBookDialog extends TitleAreaDialog {
 	protected void okPressed() {
 		saveInput();
 		createBookJson();
+		book = BookProvider.INSTANCE.addBook(jsonString);
 
-		try {
-			book = BookProvider.INSTANCE.addBook(jsonString);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				"Book successfully added", "Book " + book.getTitle() + " was successfully added.");
 		super.okPressed();

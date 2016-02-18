@@ -11,11 +11,9 @@ import com.library.app.model.BookTo;
 import com.library.app.provider.BookProvider;
 import org.eclipse.swt.widgets.Label;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.http.client.ClientProtocolException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -43,7 +41,7 @@ public class BookDetailsViewPart extends ViewPart {
 	private Label lblEditBook;
 	
 	public BookDetailsViewPart() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
@@ -83,13 +81,7 @@ public class BookDetailsViewPart extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				createBookJson();
-				try {
-					BookProvider.INSTANCE.addBook(jsonString);
-				} catch (ClientProtocolException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				BookProvider.INSTANCE.addBook(jsonString);
 			}
 			
 			@Override

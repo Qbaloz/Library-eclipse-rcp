@@ -10,7 +10,6 @@ import com.library.app.provider.BookProvider;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 
-import java.io.IOException;
 import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -31,7 +30,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.events.SelectionAdapter;
 
 public class BooksListViewPart extends ViewPart {
-	
+
 	private Text titlePrefix;
 	private Button btnDeleteBook;
 	private Button btnSearch;
@@ -47,17 +46,17 @@ public class BooksListViewPart extends ViewPart {
 	public void createPartControl(Composite parent) {
 
 		initialize(parent);
-		
+
 		btnAddListener();
 		btnSearchListener();
 		btnDeleteListener();
-		
+
 		createViewer(parent);
 
 	}
-	
-	private void initialize(Composite parent){
-		
+
+	private void initialize(Composite parent) {
+
 		parent.setLayout(new GridLayout(3, false));
 
 		Label lblSearchBook = new Label(parent, SWT.NONE);
@@ -75,9 +74,9 @@ public class BooksListViewPart extends ViewPart {
 		btnDeleteBook = new Button(parent, SWT.NONE);
 		btnDeleteBook.setText("Delete book");
 	}
-	
-	private void btnAddListener(){
-		
+
+	private void btnAddListener() {
+
 		btnAddBook.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -93,18 +92,15 @@ public class BooksListViewPart extends ViewPart {
 			}
 		});
 	}
-	
-	private void btnSearchListener(){
-		
+
+	private void btnSearchListener() {
+
 		btnSearch.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try {
-					BookProvider.INSTANCE.getBooks(titlePrefix.getText());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				BookProvider.INSTANCE.getBooks(titlePrefix.getText());
+
 			}
 
 			@Override
@@ -113,32 +109,28 @@ public class BooksListViewPart extends ViewPart {
 			}
 		});
 	}
-	
-	private void btnDeleteListener(){
-		
+
+	private void btnDeleteListener() {
+
 		btnDeleteBook.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection selection = viewer.getStructuredSelection();
 				BookTo book = (BookTo) selection.getFirstElement();
-				if(book != null){
-					try {
-						BookProvider.INSTANCE.deleteBook(book.getId());
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+				if (book != null) {
+					BookProvider.INSTANCE.deleteBook(book.getId());
 				}
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 
 			}
 		});
 	}
-	
-	private void createViewer(Composite parent){
+
+	private void createViewer(Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		createColumns(parent, viewer);
 		table = viewer.getTable();
@@ -147,17 +139,18 @@ public class BooksListViewPart extends ViewPart {
 		table.setLinesVisible(true);
 
 		viewer.setContentProvider(new ArrayContentProvider());
-		
+
 		try {
-			ViewerSupport.bind(viewer, BookProvider.INSTANCE.getBooks(titlePrefix.getText()), PojoProperties.values(new String[] { "id", "title", "authors" }));
+			ViewerSupport.bind(viewer, BookProvider.INSTANCE.getBooks(titlePrefix.getText()),
+					PojoProperties.values(new String[] { "id", "title", "authors" }));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		getSite().setSelectionProvider(viewer);
-		
+
 		createMenu();
-		
+
 		GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.FILL;
 		gridData.horizontalSpan = 3;
@@ -170,11 +163,11 @@ public class BooksListViewPart extends ViewPart {
 	public TableViewer getViewer() {
 		return viewer;
 	}
-	
-	private void createMenu(){
+
+	private void createMenu() {
 		Menu menu = new Menu(table);
 		table.setMenu(menu);
-		
+
 		MenuItem mntmAddBook = new MenuItem(menu, SWT.NONE);
 		mntmAddBook.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -185,19 +178,15 @@ public class BooksListViewPart extends ViewPart {
 			}
 		});
 		mntmAddBook.setText("Add book");
-		
+
 		MenuItem mntmDelete = new MenuItem(menu, SWT.NONE);
 		mntmDelete.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IStructuredSelection selection = viewer.getStructuredSelection();
 				BookTo book = (BookTo) selection.getFirstElement();
-				if(book != null){
-					try {
-						BookProvider.INSTANCE.deleteBook(book.getId());
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+				if (book != null) {
+					BookProvider.INSTANCE.deleteBook(book.getId());
 				}
 			}
 		});
@@ -205,8 +194,8 @@ public class BooksListViewPart extends ViewPart {
 	}
 
 	private void createColumns(final Composite parent, final TableViewer viewer) {
-		String[] titles = { "Id", "Title"};
-		int[] bounds = { 50, 185};
+		String[] titles = { "Id", "Title" };
+		int[] bounds = { 50, 185 };
 
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
 		col.setLabelProvider(new ColumnLabelProvider() {
