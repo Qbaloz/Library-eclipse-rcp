@@ -1,5 +1,9 @@
 package com.library.app.provider;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
 
@@ -38,4 +42,18 @@ public enum BookProvider {
 		writableList.clear();
 		writableList.addAll(bookRestService.sendGET(titlePrefix));
 	}
+	
+
+	public void sortByName(){
+		List<BookTo> sortedList = new ArrayList<BookTo>();
+		BookTo book = new BookTo();
+		for(int i = 0; i < writableList.size(); i++){
+			book = (BookTo) writableList.get(i);
+			sortedList.add(book);
+		}
+		Collections.sort(sortedList);
+		writableList.clear();
+		writableList.addAll(sortedList);
+	}
+	
 }

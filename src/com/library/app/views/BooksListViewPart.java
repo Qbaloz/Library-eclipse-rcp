@@ -37,6 +37,9 @@ public class BooksListViewPart extends ViewPart {
 	private Button btnAddBook;
 	private TableViewer viewer;
 	private Table table;
+	private Label lblSortBy;
+	private Button btnName;
+	private Button btnTitle;
 
 	public BooksListViewPart() {
 
@@ -52,6 +55,27 @@ public class BooksListViewPart extends ViewPart {
 		btnDeleteListener();
 
 		createViewer(parent);
+		
+		lblSortBy = new Label(parent, SWT.NONE);
+		lblSortBy.setText("Sort By:");
+		
+		btnName = new Button(parent, SWT.RADIO);
+		btnName.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookProvider.INSTANCE.getBooks(titlePrefix.getText());
+			}
+		});
+		btnName.setText("Id");
+		
+		btnTitle = new Button(parent, SWT.RADIO);
+		btnTitle.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookProvider.INSTANCE.sortByName();
+			}
+		});
+		btnTitle.setText("Title");
 
 	}
 

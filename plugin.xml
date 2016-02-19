@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="splashExtension" name="Splash Extensions" schema="schema/splashExtension.exsd"/>
 
    <extension
          id="application"
@@ -81,6 +82,65 @@
             </command>
          </menu>
       </menuContribution>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="Library.application"
+            name="Library">
+         <property
+               name="appName"
+               value="Library">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="5,275,445,15">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            class="library.splashHandlers.ExtensibleSplashHandler"
+            id="library.splashHandlers.extensible">
+      </splashHandler>
+      <splashHandler
+            class="library.splashHandlers.InteractiveSplashHandler"
+            id="library.splashHandlers.interactive">
+      </splashHandler>
+   </extension>
+   <extension
+         point="Library.splashExtension">
+      <splashExtension
+            icon="icons/af.png"
+            id="af"
+            tooltip="Application Framework">
+      </splashExtension>
+      <splashExtension
+            icon="icons/embedded.png"
+            id="embedded"
+            tooltip="Embedded">
+      </splashExtension>
+      <splashExtension
+            icon="icons/enterprise.png"
+            id="enterprise"
+            tooltip="Enterprise">
+      </splashExtension>
+      <splashExtension
+            icon="icons/languages.png"
+            id="languages"
+            tooltip="Languages">
+      </splashExtension>
+      <splashExtension
+            icon="icons/rcp.png"
+            id="rcp"
+            tooltip="RCP">
+      </splashExtension>
    </extension>
 
 </plugin>

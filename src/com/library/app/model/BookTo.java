@@ -3,7 +3,7 @@ package com.library.app.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BookTo {
+public class BookTo implements Comparable<BookTo>{
 
 	private Long id;
 	private String title;
@@ -49,6 +49,11 @@ public class BookTo {
 				.append(" title : ").append(this.title)
 				.append(" authors :").append(this.authors)
 				.toString();
+	}
+
+	@Override
+	public int compareTo(BookTo otherBook) {
+		return title.compareTo(otherBook.title);
 	}
 
 }
