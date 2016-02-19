@@ -1,9 +1,10 @@
 package com.library.app.model;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BookTo implements Comparable<BookTo>{
+public class BookTo{
 
 	private Long id;
 	private String title;
@@ -50,10 +51,17 @@ public class BookTo implements Comparable<BookTo>{
 				.append(" authors :").append(this.authors)
 				.toString();
 	}
-
-	@Override
-	public int compareTo(BookTo otherBook) {
-		return title.compareTo(otherBook.title);
-	}
+	
+    public static Comparator<BookTo> COMPARE_BY_TITLE = new Comparator<BookTo>() {
+        public int compare(BookTo one, BookTo other) {
+            return one.title.compareTo(other.title);
+        }
+    };
+    
+    public static Comparator<BookTo> COMPARE_BY_ID = new Comparator<BookTo>() {
+        public int compare(BookTo one, BookTo other) {
+            return one.id.compareTo(other.id);
+        }
+    };
 
 }

@@ -2,6 +2,7 @@ package com.library.app.provider;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -18,7 +19,7 @@ public enum BookProvider {
 	private WritableList writableList = new WritableList();
 
 	private BookProvider() {
-//			refreshWritableList("");
+		
 	}
 	
 	public BookTo addBook(String jsonString){
@@ -44,16 +45,16 @@ public enum BookProvider {
 	}
 	
 
-	public void sortByName(){
-		List<BookTo> sortedList = new ArrayList<BookTo>();
+	public void sortByName(Comparator<BookTo> comparator){
+		List<BookTo> bookList = new ArrayList<BookTo>();
 		BookTo book = new BookTo();
 		for(int i = 0; i < writableList.size(); i++){
 			book = (BookTo) writableList.get(i);
-			sortedList.add(book);
+			bookList.add(book);
 		}
-		Collections.sort(sortedList);
+		Collections.sort(bookList, comparator);
 		writableList.clear();
-		writableList.addAll(sortedList);
+		writableList.addAll(bookList);
 	}
 	
 }

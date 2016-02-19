@@ -55,28 +55,7 @@ public class BooksListViewPart extends ViewPart {
 		btnDeleteListener();
 
 		createViewer(parent);
-		
-		lblSortBy = new Label(parent, SWT.NONE);
-		lblSortBy.setText("Sort By:");
-		
-		btnName = new Button(parent, SWT.RADIO);
-		btnName.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				BookProvider.INSTANCE.getBooks(titlePrefix.getText());
-			}
-		});
-		btnName.setText("Id");
-		
-		btnTitle = new Button(parent, SWT.RADIO);
-		btnTitle.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				BookProvider.INSTANCE.sortByName();
-			}
-		});
-		btnTitle.setText("Title");
-
+		sortingByButtons(parent);
 	}
 
 	private void initialize(Composite parent) {
@@ -246,6 +225,29 @@ public class BooksListViewPart extends ViewPart {
 		column.setResizable(true);
 		column.setMoveable(true);
 		return viewerColumn;
+	}
+	
+	private void sortingByButtons(Composite parent){
+		lblSortBy = new Label(parent, SWT.NONE);
+		lblSortBy.setText("Sort By:");
+		
+		btnName = new Button(parent, SWT.RADIO);
+		btnName.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookProvider.INSTANCE.sortByName(BookTo.COMPARE_BY_ID);
+			}
+		});
+		btnName.setText("Id");
+		
+		btnTitle = new Button(parent, SWT.RADIO);
+		btnTitle.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				BookProvider.INSTANCE.sortByName(BookTo.COMPARE_BY_TITLE);
+			}
+		});
+		btnTitle.setText("Title");
 	}
 
 	@Override
