@@ -140,12 +140,8 @@ public class BooksListViewPart extends ViewPart {
 
 		viewer.setContentProvider(new ArrayContentProvider());
 
-		try {
-			ViewerSupport.bind(viewer, BookProvider.INSTANCE.getBooks(titlePrefix.getText()),
-					PojoProperties.values(new String[] { "id", "title", "authors" }));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		ViewerSupport.bind(viewer, BookProvider.INSTANCE.getBooks(titlePrefix.getText()),
+				PojoProperties.values(new String[] { "id", "title", "authors" }));
 
 		getSite().setSelectionProvider(viewer);
 

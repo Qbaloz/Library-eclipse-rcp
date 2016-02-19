@@ -14,7 +14,7 @@ public enum BookProvider {
 	private WritableList writableList = new WritableList();
 
 	private BookProvider() {
-			refreshWritableList("");
+//			refreshWritableList("");
 	}
 	
 	public BookTo addBook(String jsonString){
